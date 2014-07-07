@@ -405,8 +405,13 @@ module Bluepill
 
     def signal_process(code)
       code = code.to_s.upcase if code.is_a?(String) || code.is_a?(Symbol)
-      ::Process.kill(code, actual_pid)
-      true
+      unless actual_pid.nil?
+        ::Process.kill(code, actual_pid)
+        true
+      else
+        logger.warn "Failed to signal process with code #{code}: actual_pid is nil"
+        false
+      end
     rescue Exception => e
       logger.err "Failed to signal process #{actual_pid} with code #{code}: #{e}"
       false
