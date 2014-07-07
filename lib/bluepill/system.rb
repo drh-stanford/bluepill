@@ -104,7 +104,7 @@ module Bluepill
           redirect_io(*options.values_at(:stdin, :stdout, :stderr))
 
           ::Kernel.exec(*Shellwords.shellwords(cmd))
-          exit
+          exit # NOTREACHED
         end
 
         daemon_id = Daemonize.call_as_daemon(to_daemonize, nil, cmd)
@@ -114,7 +114,7 @@ module Bluepill
         wr.write daemon_id
         wr.close
 
-        exit
+        ::Process.exit!
       end
     end
 
